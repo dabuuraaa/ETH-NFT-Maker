@@ -1,13 +1,18 @@
 const main = async () => {
-    const nftContractFactory = await hre.ethers.getContractFactory("Web3Mint");
-    const nftContract = await nftContractFactory.deploy();
-    await nftContract.deployed();
-    console.log("Contract deployed to:", nftContract.address);
-    let txn = await nftContract.makeAnEpicNFT();
-    await txn.wait();
-    txn = await nftContract.makeAnEpicNFT();
-    await txn.wait();
-  };
+
+  const nftContractFactory = await hre.ethers.getContractFactory("Web3Mint");
+  const nftContract = await nftContractFactory.deploy();
+  await nftContract.deployed();
+  console.log("Contract deployed to:", nftContract.address);
+
+  let txn = await nftContract.mintIpfsNFT(
+    "poker",
+    "bafybeibewfzz7w7lhm33k2rmdrk3vdvi5hfrp6ol5vhklzzepfoac37lry"
+  );
+  await txn.wait();
+  let returnedTokenUri = await nftContract.tokenURI(0);
+  console.log("tokenURI:", returnedTokenUri);
+};
 
 const runMain = async () => {
   try {
@@ -18,4 +23,5 @@ const runMain = async () => {
     process.exit(1);
   }
 };
+
 runMain();
